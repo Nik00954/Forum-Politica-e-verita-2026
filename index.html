@@ -2,6 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forum: Politica & Verità 2026</title>
     <style>
         :root {
@@ -9,9 +10,10 @@
             --R-color: #ffd700; --G-color: #a855f7;
             --bg-dark: #000000; --panel-bg: #16181c;
         }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg-dark); color: #eff3f4; padding: 20px; }
-        .container { max-width: 850px; margin: auto; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-dark); color: #eff3f4; padding: 20px; margin: 0; }
+        .container { max-width: 850px; margin: auto; padding-bottom: 100px; }
         
+        /* Header Sticky */
         .header-controls { 
             position: sticky; top: 0; z-index: 1000; background: rgba(0,0,0,0.9); 
             padding: 20px 0; border-bottom: 1px solid #333; backdrop-filter: blur(10px);
@@ -20,30 +22,35 @@
         .main-buttons { display: flex; gap: 15px; margin-bottom: 20px; justify-content: center; }
         .filosofi-grid { display: flex; justify-content: center; gap: 15px; }
         
+        /* Avatar */
         .avatar { 
             width: 70px; height: 70px; border-radius: 50%; border: 2px solid #444;
             display: flex; align-items: center; justify-content: center;
-            transition: 0.3s; opacity: 0.4;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0.3;
             background: #222; overflow: hidden;
         }
         .avatar img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
         .avatar.active { opacity: 1; border-color: white; box-shadow: 0 0 20px currentColor; transform: scale(1.15); }
 
-        .progress-container { width: 100%; background: #333; height: 4px; margin-top: 15px; }
+        /* Progress Bar */
+        .progress-container { width: 100%; background: #333; height: 4px; margin-top: 15px; border-radius: 2px; }
         #progress-bar { width: 0%; height: 100%; background: var(--C-color); transition: width 0.4s ease; }
 
+        /* Pulsanti */
         button { cursor: pointer; border: none; border-radius: 25px; font-weight: bold; transition: 0.2s; }
-        .btn-main-play { background: #1d9bf0; color: white; padding: 12px 30px; font-size: 1.1em; }
+        .btn-main-play { background: #1d9bf0; color: white; padding: 12px 30px; font-size: 1.1em; box-shadow: 0 4px 15px rgba(29, 155, 240, 0.3); }
         .btn-main-stop { background: #c0392b; color: white; padding: 12px 30px; }
+        button:hover { transform: scale(1.05); filter: brightness(1.1); }
 
+        /* Testi e Scene */
         h2 { border-bottom: 1px solid #333; padding: 25px 0 10px 0; color: var(--C-color); font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; }
-        .scena { background: var(--bg-dark); padding: 20px; border-bottom: 1px solid #222; transition: 0.5s; opacity: 0.3; }
-        .scena:not(.C) { margin-left: 45px; border-left: 1px solid #333; }
+        .scena { background: var(--bg-dark); padding: 25px; border-bottom: 1px solid #222; transition: 0.5s; opacity: 0.2; }
+        .scena:not(.C) { margin-left: 40px; border-left: 1px solid #333; }
         .scena.highlight { background: #16181c; border-left: 4px solid var(--C-color); opacity: 1; transform: translateX(10px); }
         
-        .label { font-weight: bold; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; font-size: 0.95em; }
-        .text-content { font-size: 1.1em; line-height: 1.6; color: #d6d9db; }
-        .status-msg { font-size: 0.75em; display: block; margin-top: 5px; font-style: italic; }
+        .label { font-weight: bold; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; font-size: 1em; }
+        .text-content { font-size: 1.15em; line-height: 1.6; color: #d6d9db; margin: 0; }
+        .status-msg { font-size: 0.75em; display: block; margin-top: 10px; font-weight: normal; opacity: 0.8; }
     </style>
 </head>
 <body>
@@ -52,7 +59,7 @@
     <div class="header-controls">
         <div class="main-buttons">
             <button id="playBtn" class="btn-main-play" onclick="playAll()">▶ AVVIA DIBATTITO</button>
-            <button class="btn-main-stop" onclick="stopAll()">■ STOP</button>
+            <button class="btn-main-stop" onclick="location.reload()">■ RESET</button>
         </div>
 
         <div class="filosofi-grid">
@@ -66,36 +73,25 @@
     </div>
 
     <div id="script-container"></div>
-
-    <div class="poll-section">
-        <h3>CHI HA VINTO IL DIBATTITO?</h3>
-        <div class="poll-options">
-            <button class="poll-btn" onclick="vota('H')">@Il_Leviatano</button>
-            <button class="poll-btn" onclick="vota('L')">@JohnProprietà</button>
-            <button class="poll-btn" onclick="vota('R')">@JeanJacques</button>
-            <button class="poll-btn" onclick="vota('G')">@UgoGrozio</button>
-        </div>
-        <div id="voto-risultato" style="margin-top:15px; color:var(--C-color); font-weight:bold;"></div>
-    </div>
 </div>
 
 <script>
     const copione = [
-        {s: "Introduzione", p: "C", t: "Benvenuti a tutti! Oggi abbiamo in chat i giganti della filosofia moderna. Perché abbiamo creato lo Stato? Cominciamo con le presentazioni.", a: "host 1.mp3"},
+        {s: "INTRODUZIONE", p: "C", t: "Benvenuti a tutti! Oggi abbiamo in chat i giganti della filosofia moderna. Perché abbiamo creato lo Stato? Cominciamo con le presentazioni.", a: "host 1.mp3"},
         {p: "H", t: "Siete violenti per natura, senza un Capo assoluto vi uccidereste per un parcheggio. La sovranità deve essere una e indivisibile.", a: "Hobbes 1 mod.mp3"},
         {p: "L", t: "Esagerato! Ci uniamo solo per proteggere i nostri diritti naturali: vita, libertà e proprietà. Il sovrano è un semplice dipendente del popolo.", a: "Locke 1.mp3"},
         {p: "R", t: "La società è un imbroglio dei ricchi. 'L'uomo nasce libero ma è ovunque in catene'. La sovranità appartiene solo alla Volontà Generale.", a: "Rousseau 1.mp3"},
         {p: "G", t: "La società è dettata dalla nostra natura razionale, esistono regole universali e la sovranità serve a far rispettare i patti tra gli uomini.", a: "Grozio 1.mp3"},
-        {s: "Scenario: Il Caso Trump", p: "C", t: "Domanda da @Anonimo: 'Cosa ne pensate di Trump?' È il leader che spacca tutto.", a: "host 2.mp3"},
+        {s: "IL CASO TRUMP", p: "C", t: "Domanda da @Anonimo: 'Cosa ne pensate di Trump?' È il leader che spacca tutto.", a: "host 2.mp3"},
         {p: "H", t: "Un vero sovrano deve farsi temere, non deve piacere. Ma se mette in dubbio le istituzioni, sta segando il ramo su cui è seduto. È Pericoloso.", a: "Hobbes 2 mod.mp3"},
         {p: "L", t: "Nessuno è sopra la legge. Se un leader calpesta i diritti, il popolo deve poterlo cacciare via. La libertà viene prima.", a: "Locke 2.mp3"},
         {p: "R", t: "È il sintomo di una società malata. Trump rappresenta l'interesse privato contro il bene comune, e finché voterete il primo che passa, avrete leader così.", a: "Rousseau 2.mp3"},
-        {s: "Scenario: Chip Cerebrali", p: "C", t: "Se diventasse possibile installare un chip nel cervello, lo Stato dovrebbe renderli obbligatori?", a: "host 3.mp3"},
+        {s: "CHIP CEREBRALI", p: "C", t: "Se diventasse possibile installare un chip nel cervello, lo Stato dovrebbe renderli obbligatori?", a: "host 3.mp3"},
         {p: "G", t: "La natura umana ha dei limiti razionali. Non possiamo rischiare di perdere la nostra identità per un aggiornamento hardware.", a: "Grozio 2.mp3"},
         {p: "H", t: "Se un chip rende i cittadini più obbedienti e intelligenti, il Sovrano dovrebbe renderlo obbligatorio. Un popolo potenziato è uno Stato più forte.", a: "Hobbes 3 mod.mp3"},
         {p: "R", t: "Ecco l'ultima ineguaglianza! I ricchi diventeranno dei semidei e i poveri resteranno schiavi biologici.", a: "Rousseau 3.mp3"},
         {p: "L", t: "Ma siamo matti? Il mio corpo è la mia proprietà primaria. Lo Stato non può obbligarmi a installare nulla.", a: "Locke 3.mp3"},
-        {s: "Scenario: Libertà e Social Media", p: "C", t: "Elon Musk e la libertà totale su X: fa bene o servirebbe la censura?", a: "host 4.mp3"},
+        {s: "LIBERTÀ E SOCIAL MEDIA", p: "C", t: "Elon Musk e la libertà totale su X: fa bene o servirebbe la censura?", a: "host 4.mp3"},
         {p: "H", t: "La libertà di parola è caos. Lo Stato deve decidere cosa si pubblica per evitare la guerra civile. Meglio censurati che in guerra.", a: "Hobbes 4 mod.mp3"},
         {p: "L", t: "No! La verità emerge col confronto. Certo, chi istiga alla violenza va fermato, ma la censura preventiva è roba da tiranni.", a: "Locke 4.mp3"},
         {p: "R", t: "Se la stampa è dei miliardari, non è libera. La vera libertà ci sarà solo quando parleremo per il bene della patria.", a: "Rousseau 4.mp3"},
@@ -105,35 +101,33 @@
     const nomi = {C: "Conduttore", H: "@Il_Leviatano", L: "@JohnProprietà", R: "@JeanJacques", G: "@UgoGrozio"};
     const container = document.getElementById('script-container');
     
+    // Costruzione dinamica
     copione.forEach((item, i) => {
         if(item.s) {
-            const h2 = document.createElement('h2'); h2.innerText = item.s; container.appendChild(h2);
+            const h2 = document.createElement('h2'); 
+            h2.innerText = item.s; 
+            container.appendChild(h2);
         }
+        
         const div = document.createElement('div');
         div.className = `scena ${item.p}`;
         div.id = `scena-${i}`;
         
-        // --- RISOLUZIONE PROBLEMA GITHUB ---
-        // Rimosso "audio/". Usiamo encodeURI per gestire gli spazi (es: "host 1.mp3" -> "host%201.mp3")
-        const audioUrl = encodeURI(item.a); 
+        // Risoluzione URL per GitHub (Encoding + No-Cache)
+        const safeUrl = encodeURIComponent(item.a).replace(/%2F/g, '/');
+        const finalUrl = `${safeUrl}?v=${Math.random().toString(36).substring(7)}`;
 
         div.innerHTML = `
-            <span class="label" style="color: var(--${item.p}-color)">${nomi[item.p]}</span>
+            <div class="label" style="color: var(--${item.p}-color)">
+                ${nomi[item.p]} <span id="status-${i}" class="status-msg"></span>
+            </div>
             <p class="text-content">${item.t}</p>
-            <span id="status-${i}" class="status-msg"></span>
-            <audio id="audio-${i}" src="${audioUrl}" preload="auto"></audio>
+            <audio id="audio-${i}" src="${finalUrl}" preload="auto"></audio>
         `;
         container.appendChild(div);
     });
 
     let isPlaying = false;
-
-    function stopAll() {
-        isPlaying = false;
-        document.querySelectorAll('audio').forEach(a => { a.pause(); a.currentTime = 0; });
-        document.querySelectorAll('.avatar, .scena').forEach(el => el.classList.remove('active', 'highlight'));
-        document.getElementById('playBtn').innerText = "▶ AVVIA DIBATTITO";
-    }
 
     async function playAll() {
         if(isPlaying) return;
@@ -145,19 +139,25 @@
             
             const player = document.getElementById(`audio-${i}`);
             const status = document.getElementById(`status-${i}`);
+            
             evidenzia(i);
 
             await new Promise((resolve) => {
+                // Tentativo di riproduzione
                 player.play().then(() => {
-                    status.innerText = "🔊 Audio ON";
+                    status.innerText = "● LIVE";
                     status.style.color = "#00ba7c";
                     player.onended = resolve;
                 }).catch(err => {
-                    // SE L'AUDIO NON SI SENTE (File non trovato o errore GitHub)
-                    const tempoLettura = (copione[i].t.split(' ').length / 2.5) * 1000 + 2000;
-                    status.innerText = "❌ File '" + copione[i].a + "' NON TROVATO. Leggi il testo...";
+                    // Fallback se l'audio non carica
+                    console.error("Audio fallito:", copione[i].a);
+                    status.innerText = "⚠ AUDIO NON TROVATO (Leggendo...)";
                     status.style.color = "#ff4444";
-                    setTimeout(resolve, tempoLettura); 
+                    
+                    // Tempo di lettura basato sulla lunghezza del testo
+                    const words = copione[i].t.split(' ').length;
+                    const waitTime = Math.max(3500, words * 450); 
+                    setTimeout(resolve, waitTime);
                 });
             });
 
@@ -165,23 +165,28 @@
         }
         
         isPlaying = false;
-        document.getElementById('playBtn').innerText = "▶ RE-INIZIA";
-        spegni();
+        document.getElementById('playBtn').innerText = "▶ RIPETI DIBATTITO";
+        spegniAvatars();
     }
 
     function evidenzia(i) {
         document.querySelectorAll('.avatar').forEach(a => a.classList.remove('active'));
         document.querySelectorAll('.scena').forEach(s => s.classList.remove('highlight'));
-        const avId = `av-${copione[i].p}`;
-        if(document.getElementById(avId)) document.getElementById(avId).classList.add('active');
-        const scenaEl = document.getElementById(`scena-${i}`);
-        scenaEl.classList.add('highlight');
-        scenaEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        const currentActor = copione[i].p;
+        const av = document.getElementById(`av-${currentActor}`);
+        if(av) av.classList.add('active');
+        
+        const scena = document.getElementById(`scena-${i}`);
+        scena.classList.add('highlight');
+        scena.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
         document.getElementById('progress-bar').style.width = ((i + 1) / copione.length * 100) + "%";
     }
 
-    function spegni() { document.querySelectorAll('.avatar').forEach(a => a.classList.remove('active')); }
-    function vota(fil) { document.getElementById('voto-risultato').innerText = "Votato: " + nomi[fil]; }
+    function spegniAvatars() {
+        document.querySelectorAll('.avatar').forEach(a => a.classList.remove('active'));
+    }
 </script>
 </body>
 </html>
