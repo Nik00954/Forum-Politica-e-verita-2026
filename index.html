@@ -43,9 +43,7 @@
         
         .label { font-weight: bold; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; font-size: 0.95em; }
         .text-content { font-size: 1.1em; line-height: 1.6; color: #d6d9db; }
-
-        /* Debug Audio Style */
-        .audio-status { font-size: 0.7em; color: #ff4444; margin-top: 5px; display: block; }
+        .status-msg { font-size: 0.75em; display: block; margin-top: 5px; font-style: italic; }
     </style>
 </head>
 <body>
@@ -115,13 +113,14 @@
         div.className = `scena ${item.p}`;
         div.id = `scena-${i}`;
         
-        // CORREZIONE 1: Nessun encodeURIComponent. Se il file si chiama "host 1.mp3", il browser lo trova meglio così.
-        const audioUrl = "audio/" + item.a;
+        // --- RISOLUZIONE PROBLEMA GITHUB ---
+        // Rimosso "audio/". Usiamo encodeURI per gestire gli spazi (es: "host 1.mp3" -> "host%201.mp3")
+        const audioUrl = encodeURI(item.a); 
 
         div.innerHTML = `
             <span class="label" style="color: var(--${item.p}-color)">${nomi[item.p]}</span>
             <p class="text-content">${item.t}</p>
-            <span id="err-${i}" class="audio-status"></span>
+            <span id="status-${i}" class="status-msg"></span>
             <audio id="audio-${i}" src="${audioUrl}" preload="auto"></audio>
         `;
         container.appendChild(div);
@@ -145,33 +144,28 @@
             if(!isPlaying) break;
             
             const player = document.getElementById(`audio-${i}`);
-            const errorLabel = document.getElementById(`err-${i}`);
+            const status = document.getElementById(`status-${i}`);
             evidenzia(i);
 
-            // CORREZIONE 2: Gestione del Ritmo basata sulla durata REALE dell'audio
             await new Promise((resolve) => {
-                // Se l'audio è già pronto o caricabile
                 player.play().then(() => {
-                    errorLabel.innerText = "● Audio in riproduzione...";
-                    errorLabel.style.color = "#00ba7c";
+                    status.innerText = "🔊 Audio ON";
+                    status.style.color = "#00ba7c";
                     player.onended = resolve;
                 }).catch(err => {
-                    // SE L'AUDIO FALLISCE: Calcola tempo lettura basato sulla lunghezza del testo
-                    const parole = copione[i].t.split(' ').length;
-                    const tempoLettura = (parole / 2.5) * 1000; // Media di 2.5 parole al secondo
-                    
-                    errorLabel.innerText = "⚠ File '" + copione[i].a + "' non trovato nella cartella /audio. Salto in " + Math.round(tempoLettura/1000) + "s";
-                    errorLabel.style.color = "#ff4444";
-                    
+                    // SE L'AUDIO NON SI SENTE (File non trovato o errore GitHub)
+                    const tempoLettura = (copione[i].t.split(' ').length / 2.5) * 1000 + 2000;
+                    status.innerText = "❌ File '" + copione[i].a + "' NON TROVATO. Leggi il testo...";
+                    status.style.color = "#ff4444";
                     setTimeout(resolve, tempoLettura); 
                 });
             });
 
-            if(isPlaying) await new Promise(r => setTimeout(r, 800));
+            if(isPlaying) await new Promise(r => setTimeout(r, 1000));
         }
         
         isPlaying = false;
-        document.getElementById('playBtn').innerText = "▶ RE-INIZIA DIBATTITO";
+        document.getElementById('playBtn').innerText = "▶ RE-INIZIA";
         spegni();
     }
 
@@ -187,7 +181,7 @@
     }
 
     function spegni() { document.querySelectorAll('.avatar').forEach(a => a.classList.remove('active')); }
-    function vota(fil) { document.getElementById('voto-risultato').innerText = "VOTATO: " + nomi[fil]; }
+    function vota(fil) { document.getElementById('voto-risultato').innerText = "Votato: " + nomi[fil]; }
 </script>
 </body>
 </html>
