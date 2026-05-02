@@ -88,33 +88,32 @@
 </div>
 
 <script>
-    // Nomi dei file audio ottimizzati per il web (senza spazi critici)
+    // Nomi dei file audio aggiornati esattamente come da immagine fornita
     const copione = [
-        {s: "Introduzione", p: "C", t: "Benvenuti a tutti! Oggi abbiamo in chat i giganti della filosofia moderna. Perché abbiamo creato lo Stato? Cominciamo con le presentazioni.", a: "host_1.mp3"},
-        {p: "H", t: "Siete violenti per natura, senza un Capo assoluto vi uccidereste per un parcheggio. La sovranità deve essere una e indivisibile.", a: "Hobbes_1.mp3"},
-        {p: "L", t: "Esagerato! Ci uniamo solo per proteggere i nostri diritti naturali: vita, libertà e proprietà. Il sovrano è un semplice dipendente del popolo.", a: "Locke_1.mp3"},
-        {p: "R", t: "La società è un imbroglio dei ricchi. 'L'uomo nasce libero ma è ovunque in catene'. La sovranità appartiene solo alla Volontà Generale.", a: "Rousseau_1.mp3"},
-        {p: "G", t: "La società è dettata dalla nostra natura razionale, esistono regole universali e la sovranità serve a far rispettare i patti tra gli uomini.", a: "Grozio_1.mp3"},
-        {s: "Scenario: Il Caso Trump", p: "C", t: "Domanda da @Anonimo: 'Cosa ne pensate di Trump?' È il leader che spacca tutto.", a: "host_2.mp3"},
-        {p: "H", t: "Un vero sovrano deve farsi temere, non deve piacere. Ma se mette in dubbio le istituzioni, sta segando il ramo su cui è seduto. È Pericoloso.", a: "Hobbes_2.mp3"},
-        {p: "L", t: "Nessuno è sopra la legge. Se un leader calpesta i diritti, il popolo deve poterlo cacciare via. La libertà viene prima.", a: "Locke_2.mp3"},
-        {p: "R", t: "È il sintomo di una società malata. Trump rappresenta l'interesse privato contro il bene comune, e finché voterete il primo che passa, avrete leader così.", a: "Rousseau_2.mp3"},
-        {s: "Scenario: Chip Cerebrali", p: "C", t: "Se diventasse possibile installare un chip nel cervello, lo Stato dovrebbe renderli obbligatori?", a: "host_3.mp3"},
-        {p: "G", t: "La natura umana ha dei limiti razionali. Non possiamo rischiare di perdere la nostra identità per un aggiornamento hardware.", a: "Grozio_2.mp3"},
-        {p: "H", t: "Se un chip rende i cittadini più obbedienti e intelligenti, il Sovrano dovrebbe renderlo obbligatorio. Un popolo potenziato è uno Stato più forte.", a: "Hobbes_3.mp3"},
-        {p: "R", t: "Ecco l'ultima ineguaglianza! I ricchi diventeranno dei semidei e i poveri resteranno schiavi biologici.", a: "Rousseau_3.mp3"},
-        {p: "L", t: "Ma siamo matti? Il mio corpo è la mia proprietà primaria. Lo Stato non può obbligarmi a installare nulla.", a: "Locke_3.mp3"},
-        {s: "Scenario: Libertà e Social Media", p: "C", t: "Elon Musk e la libertà totale su X: fa bene o servirebbe la censura?", a: "host_4.mp3"},
-        {p: "H", t: "La libertà di parola è caos. Lo Stato deve decidere cosa si pubblica per evitare la guerra civile. Meglio censurati che in guerra.", a: "Hobbes_4.mp3"},
-        {p: "L", t: "No! La verità emerge col confronto. Certo, chi istiga alla violenza va fermato, ma la censura preventiva è roba da tiranni.", a: "Locke_4.mp3"},
-        {p: "R", t: "Se la stampa è dei miliardari, non è libera. La vera libertà ci sarà solo quando parleremo per il bene della patria.", a: "Rousseau_4.mp3"},
-        {p: "G", t: "Libertà senza responsabilità è abuso. Se insulti o menti, danneggi l'ordine, e ne rispondi davanti a un giudice.", a: "Grozio_3.mp3"}
+        {s: "Introduzione", p: "C", t: "Benvenuti a tutti! Oggi abbiamo in chat i giganti della filosofia moderna. Perché abbiamo creato lo Stato? Cominciamo con le presentazioni.", a: "host 1.mp3"},
+        {p: "H", t: "Siete violenti per natura, senza un Capo assoluto vi uccidereste per un parcheggio. La sovranità deve essere una e indivisibile.", a: "Hobbes 1 mod.mp3"},
+        {p: "L", t: "Esagerato! Ci uniamo solo per proteggere i nostri diritti naturali: vita, libertà e proprietà. Il sovrano è un semplice dipendente del popolo.", a: "Locke 1.mp3"},
+        {p: "R", t: "La società è un imbroglio dei ricchi. 'L'uomo nasce libero ma è ovunque in catene'. La sovranità appartiene solo alla Volontà Generale.", a: "Rousseau 1.mp3"},
+        {p: "G", t: "La società è dettata dalla nostra natura razionale, esistono regole universali e la sovranità serve a far rispettare i patti tra gli uomini.", a: "Grozio 1.mp3"},
+        {s: "Scenario: Il Caso Trump", p: "C", t: "Domanda da @Anonimo: 'Cosa ne pensate di Trump?' È il leader che spacca tutto.", a: "host 2.mp3"},
+        {p: "H", t: "Un vero sovrano deve farsi temere, non deve piacere. Ma se mette in dubbio le istituzioni, sta segando il ramo su cui è seduto. È Pericoloso.", a: "Hobbes 2 mod.mp3"},
+        {p: "L", t: "Nessuno è sopra la legge. Se un leader calpesta i diritti, il popolo deve poterlo cacciare via. La libertà viene prima.", a: "Locke 2.mp3"},
+        {p: "R", t: "È il sintomo di una società malata. Trump rappresenta l'interesse privato contro il bene comune, e finché voterete il primo che passa, avrete leader così.", a: "Rousseau 2.mp3"},
+        {s: "Scenario: Chip Cerebrali", p: "C", t: "Se diventasse possibile installare un chip nel cervello, lo Stato dovrebbe renderli obbligatori?", a: "host 3.mp3"},
+        {p: "G", t: "La natura umana ha dei limiti razionali. Non possiamo rischiare di perdere la nostra identità per un aggiornamento hardware.", a: "Grozio 2.mp3"},
+        {p: "H", t: "Se un chip rende i cittadini più obbedienti e intelligenti, il Sovrano dovrebbe renderlo obbligatorio. Un popolo potenziato è uno Stato più forte.", a: "Hobbes 3 mod.mp3"},
+        {p: "R", t: "Ecco l'ultima ineguaglianza! I ricchi diventeranno dei semidei e i poveri resteranno schiavi biologici.", a: "Rousseau 3.mp3"},
+        {p: "L", t: "Ma siamo matti? Il mio corpo è la mia proprietà primaria. Lo Stato non può obbligarmi a installare nulla.", a: "Locke 3.mp3"},
+        {s: "Scenario: Libertà e Social Media", p: "C", t: "Elon Musk e la libertà totale su X: fa bene o servirebbe la censura?", a: "host 4.mp3"},
+        {p: "H", t: "La libertà di parola è caos. Lo Stato deve decidere cosa si pubblica per evitare la guerra civile. Meglio censurati che in guerra.", a: "Hobbes 4 mod.mp3"},
+        {p: "L", t: "No! La verità emerge col confronto. Certo, chi istiga alla violenza va fermato, ma la censura preventiva è roba da tiranni.", a: "Locke 4.mp3"},
+        {p: "R", t: "Se la stampa è dei miliardari, non è libera. La vera libertà ci sarà solo quando parleremo per il bene della patria.", a: "Rousseau 4.mp3"},
+        {p: "G", t: "Libertà senza responsabilità è abuso. Se insulti o menti, danneggi l'ordine, e ne rispondi davanti a un giudice.", a: "Grozio 3.mp3"}
     ];
 
     const nomi = {C: "Conduttore", H: "@Il_Leviatano", L: "@JohnProprietà", R: "@JeanJacques", G: "@UgoGrozio"};
     const container = document.getElementById('script-container');
     
-    // Generazione dinamica dei blocchi
     copione.forEach((item, i) => {
         if(item.s) {
             const h2 = document.createElement('h2'); h2.innerText = item.s; container.appendChild(h2);
@@ -122,19 +121,22 @@
         const div = document.createElement('div');
         div.className = `scena ${item.p}`;
         div.id = `scena-${i}`;
+        
+        // Uso di encodeURIComponent per gestire gli spazi nei nomi dei file audio
+        const audioUrl = "audio/" + encodeURIComponent(item.a);
+
         div.innerHTML = `
             <span class="label" style="color: var(--${item.p}-color)">${nomi[item.p]}</span>
             <p class="text-content">${item.t}</p>
             <div class="controls-row">
                 <button class="btn-small" onclick="manualPlay(${i})">PLAY SINGOLO</button>
-                <audio id="audio-${i}" src="audio/${item.a}" preload="auto" controls></audio>
+                <audio id="audio-${i}" src="${audioUrl}" preload="auto" controls></audio>
             </div>
         `;
         container.appendChild(div);
     });
 
     let isPlaying = false;
-    let currentIndex = 0;
 
     function stopAll() {
         isPlaying = false;
@@ -145,7 +147,8 @@
     function manualPlay(i) {
         stopAll();
         evidenzia(i);
-        document.getElementById(`audio-${i}`).play();
+        const a = document.getElementById(`audio-${i}`);
+        a.play().catch(e => console.log("Errore riproduzione manuale:", e));
     }
 
     async function playAll() {
@@ -158,17 +161,15 @@
             const player = document.getElementById(`audio-${i}`);
             evidenzia(i);
 
-            // Avvio riproduzione e attesa fine obbligatoria
             await new Promise((resolve) => {
                 player.play().catch(e => {
-                    console.log("Audio non trovato, salto alla prossima tra 2 secondi...");
-                    setTimeout(resolve, 2000); // Se l'audio manca, aspetta 2 secondi e continua
+                    console.log("Audio non trovato o bloccato, proseguo tra 2 secondi:", copione[i].a);
+                    setTimeout(resolve, 2000); 
                 });
                 player.onended = resolve;
             });
 
-            // Piccola pausa di respiro tra le battute
-            await new Promise(r => setTimeout(r, 800));
+            if(isPlaying) await new Promise(r => setTimeout(r, 800));
         }
         isPlaying = false;
         spegni();
