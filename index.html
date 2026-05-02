@@ -23,34 +23,28 @@
         .avatar { 
             width: 70px; height: 70px; border-radius: 50%; border: 2px solid #444;
             display: flex; align-items: center; justify-content: center;
-            transition: 0.3s; opacity: 0.6;
+            transition: 0.3s; opacity: 0.4;
             background: #222; overflow: hidden;
         }
         .avatar img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
         .avatar.active { opacity: 1; border-color: white; box-shadow: 0 0 20px currentColor; transform: scale(1.15); }
 
         .progress-container { width: 100%; background: #333; height: 4px; margin-top: 15px; }
-        #progress-bar { width: 0%; height: 100%; background: var(--C-color); transition: width 0.3s ease; }
+        #progress-bar { width: 0%; height: 100%; background: var(--C-color); transition: width 0.4s ease; }
 
         button { cursor: pointer; border: none; border-radius: 25px; font-weight: bold; transition: 0.2s; }
-        .btn-main-play { background: #fff; color: #000; padding: 12px 25px; }
-        .btn-main-stop { background: #c0392b; color: white; padding: 12px 25px; }
+        .btn-main-play { background: #1d9bf0; color: white; padding: 12px 30px; font-size: 1.1em; }
+        .btn-main-stop { background: #c0392b; color: white; padding: 12px 30px; }
 
         h2 { border-bottom: 1px solid #333; padding: 25px 0 10px 0; color: var(--C-color); font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; }
-        .scena { background: var(--bg-dark); padding: 15px; border-bottom: 1px solid #222; transition: 0.4s; opacity: 0.4; }
+        .scena { background: var(--bg-dark); padding: 20px; border-bottom: 1px solid #222; transition: 0.5s; opacity: 0.3; }
         .scena:not(.C) { margin-left: 45px; border-left: 1px solid #333; }
-        .scena.highlight { background: #16181c; border-left: 4px solid var(--C-color); opacity: 1; }
+        .scena.highlight { background: #16181c; border-left: 4px solid var(--C-color); opacity: 1; transform: translateX(10px); }
         
         .label { font-weight: bold; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; font-size: 0.95em; }
-        .text-content { font-size: 1.05em; line-height: 1.5; color: #d6d9db; margin-bottom: 15px; }
+        .text-content { font-size: 1.1em; line-height: 1.6; color: #d6d9db; }
 
-        .controls-row { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
-        .btn-small { padding: 6px 12px; font-size: 0.7em; background: #202327; color: #1d9bf0; border: 1px solid #333; }
-        audio { height: 30px; filter: invert(100%); opacity: 0.8; flex-grow: 1; max-width: 250px; }
-
-        .poll-section { margin-top: 50px; padding: 30px; background: #16181c; border-radius: 15px; text-align: center; border: 1px solid #333; }
-        .poll-options { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
-        .poll-btn { padding: 10px 20px; background: #202327; color: #fff; border: 1px solid #444; border-radius: 20px; }
+        audio { height: 30px; filter: invert(100%); opacity: 0.5; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -58,7 +52,7 @@
 <div class="container">
     <div class="header-controls">
         <div class="main-buttons">
-            <button class="btn-main-play" onclick="playAll()">▶ AVVIA DIBATTITO</button>
+            <button id="playBtn" class="btn-main-play" onclick="playAll()">▶ AVVIA DIBATTITO</button>
             <button class="btn-main-stop" onclick="stopAll()">■ STOP</button>
         </div>
 
@@ -82,12 +76,11 @@
             <button class="poll-btn" onclick="vota('R')">@JeanJacques</button>
             <button class="poll-btn" onclick="vota('G')">@UgoGrozio</button>
         </div>
-        <div id="voto-risultato" style="margin-top:15px; color:var(--C-color);"></div>
+        <div id="voto-risultato" style="margin-top:15px; color:var(--C-color); font-weight:bold;"></div>
     </div>
 </div>
 
 <script>
-    // Configurazione file audio (Assicurati che la cartella 'audio' sia nella stessa directory dell'index)
     const copione = [
         {s: "Introduzione", p: "C", t: "Benvenuti a tutti! Oggi abbiamo in chat i giganti della filosofia moderna. Perché abbiamo creato lo Stato? Cominciamo con le presentazioni.", a: "host 1.mp3"},
         {p: "H", t: "Siete violenti per natura, senza un Capo assoluto vi uccidereste per un parcheggio. La sovranità deve essere una e indivisibile.", a: "Hobbes 1 mod.mp3"},
@@ -113,7 +106,7 @@
     const nomi = {C: "Conduttore", H: "@Il_Leviatano", L: "@JohnProprietà", R: "@JeanJacques", G: "@UgoGrozio"};
     const container = document.getElementById('script-container');
     
-    // Inizializzazione della pagina
+    // Generazione scenari
     copione.forEach((item, i) => {
         if(item.s) {
             const h2 = document.createElement('h2'); h2.innerText = item.s; container.appendChild(h2);
@@ -122,66 +115,56 @@
         div.className = `scena ${item.p}`;
         div.id = `scena-${i}`;
         
-        // Risoluzione URL: rimosso encodeURIComponent se i file hanno spazi fisici e il server li accetta così.
-        // Se non funziona, usa: "audio/" + encodeURI(item.a)
-        const audioUrl = "audio/" + item.a;
+        // CORREZIONE CRITICA: Uso di encodeURIComponent per gestire gli spazi nel file
+        const audioUrl = "audio/" + item.a.split('/').map(encodeURIComponent).join('/');
 
         div.innerHTML = `
             <span class="label" style="color: var(--${item.p}-color)">${nomi[item.p]}</span>
             <p class="text-content">${item.t}</p>
-            <div class="controls-row">
-                <button class="btn-small" onclick="manualPlay(${i})">PLAY SINGOLO</button>
-                <audio id="audio-${i}" src="${audioUrl}" preload="auto" controls></audio>
-            </div>
+            <audio id="audio-${i}" src="${audioUrl}" preload="auto"></audio>
         `;
         container.appendChild(div);
     });
 
     let isPlaying = false;
-    let currentAudio = null;
 
     function stopAll() {
         isPlaying = false;
-        if(currentAudio) {
-            currentAudio.pause();
-            currentAudio.currentTime = 0;
-        }
         document.querySelectorAll('audio').forEach(a => { a.pause(); a.currentTime = 0; });
         document.querySelectorAll('.avatar, .scena').forEach(el => el.classList.remove('active', 'highlight'));
-    }
-
-    function manualPlay(i) {
-        stopAll();
-        evidenzia(i);
-        const a = document.getElementById(`audio-${i}`);
-        a.play().catch(e => console.error("Errore audio:", e));
+        document.getElementById('playBtn').innerText = "▶ AVVIA DIBATTITO";
     }
 
     async function playAll() {
         if(isPlaying) return;
         isPlaying = true;
+        document.getElementById('playBtn').innerText = "DIBATTITO IN CORSO...";
         
         for (let i = 0; i < copione.length; i++) {
             if(!isPlaying) break;
             
             const player = document.getElementById(`audio-${i}`);
-            currentAudio = player;
             evidenzia(i);
 
-            // Attesa che l'audio sia pronto per evitare salti veloci
+            // GESTIONE RITMO E AUDIO
             await new Promise((resolve) => {
+                // Prova a riprodurre
                 player.play().then(() => {
+                    // Se l'audio parte, aspetta che finisca
                     player.onended = resolve;
-                }).catch(e => {
-                    console.warn("Audio non trovato, salto battuta:", copione[i].a);
-                    setTimeout(resolve, 3000); // Se l'audio manca, aspetta 3 secondi prima di passare alla prossima
+                }).catch(err => {
+                    // Se l'audio non si sente/manca, OBBLIGO di attesa di 4 secondi per leggere il testo
+                    console.log("Audio mancante o bloccato, attendo lettura manuale...");
+                    setTimeout(resolve, 4500); 
                 });
             });
 
-            // Ritmo: Pausa drammatica tra le battute (1,2 secondi)
-            if(isPlaying) await new Promise(r => setTimeout(r, 1200));
+            // Piccola pausa tra un filosofo e l'altro
+            if(isPlaying) await new Promise(r => setTimeout(r, 1000));
         }
+        
         isPlaying = false;
+        document.getElementById('playBtn').innerText = "▶ RE-INIZIA DIBATTITO";
         spegni();
     }
 
@@ -204,7 +187,7 @@
     }
 
     function vota(fil) {
-        document.getElementById('voto-risultato').innerText = "Voto registrato per " + nomi[fil];
+        document.getElementById('voto-risultato').innerText = "VOTATO: " + nomi[fil] + "! La storia ti darà ragione.";
     }
 </script>
 </body>
